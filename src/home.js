@@ -28,7 +28,7 @@ export default class Home extends Component {
           <Button
             title="Profile Utilisateur"
             onPress={() => {
-              this.props.navigation.navigate('ProfileScreen');
+              this.props.navigation.navigate('Profile');
             }}
           />
           <Button
