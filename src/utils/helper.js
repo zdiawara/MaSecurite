@@ -1,12 +1,26 @@
 import {AsyncStorage} from 'react-native';
-import {DISTANCE_INFRA_KEY, DISTANCE_KEY} from './constants';
+import {DISTANCE_INFRA_KEY, DISTANCE_KEY, NAME_KEY} from './constants';
 
-export const setDistance = (distance) => {
-  return AsyncStorage.setItem(DISTANCE_KEY, distance);
+const incrementDistance = async (key, distance) => {
+  const distanceStocked = await buildDistance(key);
+  const distanceTotale = parseInt(distance, 10) + parseInt(distanceStocked, 10);
+  AsyncStorage.setItem(key, `${distanceTotale}`);
 };
 
-export const setDistanceInfra = (distanceInfra) => {
-  return AsyncStorage.setItem(DISTANCE_INFRA_KEY, distanceInfra);
+export const setDistance = async (distance) => {
+  incrementDistance(DISTANCE_KEY, distance);
+};
+
+export const setDistanceInfra = async (distanceInfra) => {
+  incrementDistance(DISTANCE_INFRA_KEY, distanceInfra);
+};
+
+export const setName = async (name) => {
+  return await AsyncStorage.setItem(NAME_KEY, name);
+};
+
+export const getName = async () => {
+  return await AsyncStorage.getItem(NAME_KEY);
 };
 
 const buildDistance = async (key) => {

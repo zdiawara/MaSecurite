@@ -1,19 +1,11 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Alert,
-  Platform,
-  ImageBackground,
-} from 'react-native';
+import {StyleSheet, View, Text, Platform, ImageBackground} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import HaversineGeolocation from 'haversine-geolocation';
 import {getSpeedLimit} from '../API/SpeedLimit';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import Geolocation from '@react-native-community/geolocation';
 import {setDistance, setDistanceInfra} from './utils/helper';
-import {log} from 'react-native-reanimated';
 
 export default class AppMap extends Component {
   static navigationOptions = {
@@ -25,9 +17,15 @@ export default class AppMap extends Component {
     this.state = {
       speedLimit: 0,
       initialPosition: null,
+      region: {
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0,
+        longitudeDelta: 0,
+      },
       speed: 0,
-      distance: 0,
       // distance total en infra
+      distance: 0,
       distanceInfra: 0,
       point1: null,
       point2: null,
@@ -81,7 +79,6 @@ export default class AppMap extends Component {
       },
       (error) => {
         console.log(error);
-        console.log('oookk');
         //Alert.alert(error.message);
       },
       {enableHighAccuracy: true, maximumAge: 1000, timeout: 30 * 1000},
@@ -112,13 +109,19 @@ export default class AppMap extends Component {
       }
 
       // Calcul de la distance
-      const distance = HaversineGeolocation.getDistanceBetween(
+      const distance = HaversineGeolocation.getDistanceBetween(point1, point2);
+
+      const newState = {
         point1,
         point2,
-        'm',
-      );
-
-      const newState = {point1, point2, distance: state.distance + distance};
+        distance: state.distance + distance,
+        region: {
+          latitude,
+          longitude,
+          latitudeDelta: 0.03,
+          longitudeDelta: 0.03,
+        },
+      };
 
       // L'ut est en infro
       if (state.speed > state.speedLimit) {
@@ -157,6 +160,8 @@ export default class AppMap extends Component {
           onUserLocationChange={this.onUserLocationChange.bind(this)}
           style={styles.map}
           initialRegion={this.state.initialPosition}
+          showsMyLocationButton
+          region={this.state.region}
         />
         <View
           style={{

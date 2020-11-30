@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Share} from 'react-native';
-import {Platform} from 'react-native';
+import {Alert, Button, Share, TextInput} from 'react-native';
 import {
   View,
   TouchableOpacity,
@@ -11,7 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 //import UserAvatar from 'react-native-user-avatar';
-import {getDistance, getDistanceInfra} from './utils/helper';
+import {getDistance, getDistanceInfra, getName, setName} from './utils/helper';
 
 export default class Profile extends Component {
   constructor() {
@@ -19,27 +18,31 @@ export default class Profile extends Component {
     this.state = {
       distance: 0,
       distanceInfra: 0,
+      showForm: false,
+      name: 'Prénom NOM',
     };
   }
 
   componentDidMount() {
-    this.iniDistance();
+    this.initDistance();
+    getName()
+      .then((name) => {
+        this.setState({name});
+      })
+      .then((e) => {
+        console.log(e);
+      });
   }
 
-  async iniDistance() {
+  async initDistance() {
     const distance = await getDistance();
     const distanceInfra = await getDistanceInfra();
-    this.setState({
-      distance: distance,
-      distanceInfra: distanceInfra,
-    });
+    this.setState({distance, distanceInfra});
   }
 
   onSahre = () => {
-    let text = 'Helloooo test test test';
-    if (Platform.OS === 'android')
-      text = text.concat('https://www.youtube.com');
-    else text = text.concat('https://www.youtube.com');
+    let text = `Mon score est ${this.buildScore()}%`;
+
     Share.share(
       {
         subect: 'MOI',
@@ -55,6 +58,90 @@ export default class Profile extends Component {
       },
     );
   };
+
+  buildScore = () => {
+    const distance = parseInt(this.state.distance, 10);
+    const distanceInfra = parseInt(this.state.distanceInfra, 10);
+    if (distance === 0) {
+      return 100;
+    }
+    return (1 - distanceInfra / distance) * 100;
+  };
+
+  onEditName = () => {
+    this.setState({showForm: true});
+  };
+
+  saveName = async () => {
+    try {
+      if (!this.state.name || this.state.name.trim() === '') {
+        Alert.alert('Erreur de saisie', 'Entrez un nom valide');
+        return;
+      }
+      await setName(this.state.name);
+      this.setState({showForm: false});
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  renderName = () => {
+    if (this.state.showForm) {
+      // Afficher le formulaire
+      return (
+        <View style={{padding: 5, flexDirection: 'row', alignItems: 'center'}}>
+          <TextInput
+            style={{
+              height: 40,
+              flex: 1,
+              borderColor: 'gray',
+              backgroundColor: '#fff',
+              borderWidth: 1,
+            }}
+            onChangeText={(name) => {
+              this.setState({name});
+            }}
+            placeholder="Prénom NOM"
+            value={this.state.name}
+          />
+          <View style={{marginHorizontal: 5}}>
+            <Button
+              onPress={() => {
+                this.setState({showForm: false});
+              }}
+              color="red"
+              title="Annuler"
+            />
+          </View>
+          <Button onPress={this.saveName} title="Valider" />
+        </View>
+      );
+    }
+
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: 10,
+        }}>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 25,
+            fontWeight: 'bold',
+            padding: 10,
+          }}>
+          {this.state.name}
+        </Text>
+
+        {/** TODO : à changer par un rayon */}
+        <Button onPress={this.onEditName} title="Modifier" />
+      </View>
+    );
+  };
+
   render() {
     return (
       <View style={{flex: 1}}>
@@ -69,33 +156,12 @@ export default class Profile extends Component {
             <TouchableOpacity>
               <Image
                 source={require('../icon/Slogan.png')}
-                style={{width: 30, height: 30}}></Image>
+                style={{width: 30, height: 30}}
+              />
             </TouchableOpacity>
           </View>
-          <View style={{alignItems: 'center'}}>
-            {/** 
-             * 
-             * <UserAvatar
-              size={100}
-              name="Stephan Kwan"
-              style={{
-                width: 140,
-                height: 140,
-                borderRadius: 100,
-                marginTop: -70,
-                backgroundColor: 'steelblue',
-              }}
-            />
-             * 
-             */}
-            <Text style={{fontSize: 25, fontWeight: 'bold', padding: 10}}>
-              Stephan KWAN
-            </Text>
-            <Text style={{fontSize: 15, fontWeight: 'bold', color: 'grey'}}>
-              {' '}
-              25, Homme{' '}
-            </Text>
-          </View>
+
+          {this.renderName()}
 
           <TouchableOpacity style={styles.infoBoxScore}>
             <ImageBackground
@@ -108,8 +174,7 @@ export default class Profile extends Component {
                   fontWeight: 'bold',
                   textAlign: 'center',
                 }}>
-                {' '}
-                100%{' '}
+                {`${this.buildScore()}%`}
               </Text>
             </ImageBackground>
             <Text
@@ -119,30 +184,24 @@ export default class Profile extends Component {
                 fontWeight: 'bold',
                 padding: 10,
               }}>
-              {' '}
-              Score{' '}
+              Score
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.infoBox}>
-            <Image
-              source={require('../icon/iconLocalisation.png')}
-              style={{width: 20, height: 20}}></Image>
-            <Text
-              style={{
-                fontSize: 15,
-                color: '#818181',
-                fontWeight: 'bold',
-                marginLeft: 10,
-              }}>
-              {this.state.distance}, {this.state.distanceInfra}
+            <Text style={styles.distance}>
+              Distance totale : {this.state.distance} km
+            </Text>
+            <Text style={styles.distance}>
+              Infraction : {this.state.distanceInfra} km
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.infoBoxShare} onPress={this.onSahre}>
             <Image
               source={require('../icon/iconShare.png')}
-              style={{width: 20, height: 20}}></Image>
+              style={{width: 20, height: 20}}
+            />
             <Text
               style={{
                 fontSize: 15,
@@ -188,14 +247,20 @@ const styles = StyleSheet.create({
   },
   infoBox: {
     alignSelf: 'center',
-    flexDirection: 'row',
+    //flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: '#f0f8ff',
     width: '50%',
     borderRadius: 10,
-    padding: 20,
-    paddingBottom: 22,
+    paddingVertical: 20,
+    paddingHorizontal: 0,
     elevation: 15,
     marginTop: 20,
+  },
+  distance: {
+    fontSize: 15,
+    color: '#818181',
+    fontWeight: 'bold',
+    marginLeft: 10,
   },
 });
