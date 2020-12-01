@@ -57,7 +57,7 @@ export default class AppMap extends Component {
         point2: currentPoint,
         initialPosition: {
           ...currentPoint,
-          latitudeDelta: 0.09,
+          latitudeDelta: 0.035,
           longitudeDelta: 0.035,
         },
       });
@@ -72,7 +72,7 @@ export default class AppMap extends Component {
           point2: currentPoint,
           initialPosition: {
             ...currentPoint,
-            latitudeDelta: 0.09,
+            latitudeDelta: 0.035,
             longitudeDelta: 0.035,
           },
         });
@@ -118,8 +118,8 @@ export default class AppMap extends Component {
         region: {
           latitude,
           longitude,
-          latitudeDelta: 0.03,
-          longitudeDelta: 0.03,
+          latitudeDelta: 0.035,
+          longitudeDelta: 0.035,
         },
       };
 

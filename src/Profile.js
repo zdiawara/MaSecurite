@@ -146,20 +146,10 @@ export default class Profile extends Component {
     return (
       <View style={{flex: 1}}>
         <ScrollView>
-          <View
-            style={{
-              padding: 10,
-              width: '100%',
-              backgroundColor: '#000',
-              height: 150,
-            }}>
-            <TouchableOpacity>
-              <Image
-                source={require('../icon/Slogan.png')}
-                style={{width: 30, height: 30}}
-              />
-            </TouchableOpacity>
-          </View>
+        <ImageBackground 
+          source={require('../icon/Slogan.png')}
+          style={{height: 150, width: '100%', justifyContent: 'center'}}>
+        </ImageBackground>
 
           {this.renderName()}
 
@@ -237,7 +227,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: '#f0f8ff',
-    width: '50%',
+    width: '90%',
     borderRadius: 10,
     padding: 20,
     paddingBottom: 22,
@@ -250,7 +240,7 @@ const styles = StyleSheet.create({
     //flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: '#f0f8ff',
-    width: '50%',
+    width: '90%',
     borderRadius: 10,
     paddingVertical: 20,
     paddingHorizontal: 0,
@@ -259,6 +249,7 @@ const styles = StyleSheet.create({
   },
   distance: {
     fontSize: 15,
+    justifyContent: 'center',
     color: '#818181',
     fontWeight: 'bold',
     marginLeft: 10,
