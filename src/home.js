@@ -37,6 +37,12 @@ export default class Home extends Component {
               this.props.navigation.navigate('GuideConducteur');
             }}
           />
+          <Button
+            title="Condition d'utilisation"
+            onPress={() => {
+              this.props.navigation.navigate('CGU');
+            }}
+          />
         </ImageBackground>
       </View>
     );
