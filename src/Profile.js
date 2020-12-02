@@ -39,7 +39,7 @@ export default class Profile extends Component {
     const distanceInfra = await getDistanceInfra();
     this.setState({distance, distanceInfra});
   }
-
+  
   onSahre = () => {
     let text = `Mon score est ${this.buildScore()}%`;
 
@@ -48,11 +48,11 @@ export default class Profile extends Component {
         subect: 'MOI',
         title: 'MOI',
         message: text,
-        url: 'app://freakyItians',
+        url: 'app',
       },
       {
         //Android
-        dialogTitle: 'Please Like Share and subscribe !!!',
+        dialogTitle: 'Ok',
         //iOS
         excludeActivityTypes: [],
       },
@@ -186,6 +186,12 @@ export default class Profile extends Component {
               Infraction : {this.state.distanceInfra} km
             </Text>
           </TouchableOpacity>
+
+          <View style={styles.infoBox}>
+            <Text style={styles.distance}>
+              Réception Score : xxxxxxx@gmail.com  
+            </Text>
+          </View>
 
           <TouchableOpacity style={styles.infoBoxShare} onPress={this.onSahre}>
             <Image

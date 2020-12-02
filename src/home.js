@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
+import { Button } from 'react-native-elements';
 import {
   StyleSheet,
   ImageBackground,
   View,
   Text,
   Image,
-  Button,
 } from 'react-native';
 
 export default class Home extends Component {
@@ -15,34 +15,49 @@ export default class Home extends Component {
         <ImageBackground
           source={require('../icon/background.png')}
           style={styles.backgroundImage}>
-          <View style={styles.view1}>
-            <Image style={styles.image} source={require('../icon/Logo.png')} />
+          <View style={styles.container2}>
+            <View style={styles.view1}>
+              <Image style={styles.image} source={require('../icon/Logo.png')} />
+            </View>
+            <View style={styles.viewButton}>
+              <Button
+                title="GPS"
+                type="outline"
+                reased
+                onPress={() => {
+                  this.props.navigation.navigate('AppMAP');
+                }}
+              />
+            </View>
+            <View style={styles.viewButton}>
+              <Button
+                title="Profil Utilisateur"
+                type="outline"
+                reased
+                onPress={() => {
+                  this.props.navigation.navigate('Profile');
+                }}
+              />
+            </View>
+            <View style={styles.viewButton}>
+              <Button
+                title="Guide du bon conducteur"
+                type="outline"
+                reased
+                onPress={() => {
+                  this.props.navigation.navigate('GuideConducteur');
+                }}
+              />
+            </View>
+            <Text>{'\n'} {'\n'}</Text>
+            <Button
+              title="Condition générale d'utilisation"
+              type="clear"
+              onPress={() => {
+                this.props.navigation.navigate('CGU');
+              }}
+            />
           </View>
-          <Text style={styles.title}> Ma Sécurité Routière </Text>
-          <Button
-            title="GPS"
-            onPress={() => {
-              this.props.navigation.navigate('AppMAP');
-            }}
-          />
-          <Button
-            title="Profile Utilisateur"
-            onPress={() => {
-              this.props.navigation.navigate('Profile');
-            }}
-          />
-          <Button
-            title="Guide du bon conducteur"
-            onPress={() => {
-              this.props.navigation.navigate('GuideConducteur');
-            }}
-          />
-          <Button
-            title="Condition d'utilisation"
-            onPress={() => {
-              this.props.navigation.navigate('CGU');
-            }}
-          />
         </ImageBackground>
       </View>
     );
@@ -57,6 +72,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  container2: {
+    flex: 1,
+    marginTop: '20%',
+  },
+  viewButton: {
+    marginBottom: 10,
+  },
   backgroundImage: {
     flex: 1,
     width: '100%',
@@ -65,12 +87,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   view1: {
+    marginBottom:50,
     alignItems: 'center',
     justifyContent: 'center',
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 120,
+    height: 120,
   },
   title: {
     fontSize: 32,
