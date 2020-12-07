@@ -183,13 +183,13 @@ export default class Profile extends Component {
               Distance totale : {this.state.distance} km
             </Text>
             <Text style={styles.distance}>
-              Infraction : {this.state.distanceInfra} km
+              Distance en excès : {this.state.distanceInfra} km
             </Text>
           </TouchableOpacity>
 
           <View style={styles.infoBox}>
             <Text style={styles.distance}>
-              Réception Score : xxxxxxx@gmail.com  
+              Réception Score : masecurite58@gmail.com  
             </Text>
           </View>
 
